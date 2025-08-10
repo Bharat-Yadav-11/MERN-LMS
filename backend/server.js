@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const PORT = process.env.PORT || 5000;
+const authRoutes = require('./routes/auth-routes/index')
 
 // db connection
 const connectDB = require('./database/mongodb');
@@ -17,6 +18,9 @@ app.use(
         allowedHeaders: ['Content-Type', 'Authorization']
     })
 );
+
+// routes configuration
+app.use('/auth', authRoutes);
 
 app.get('/', (req, res) => {
     res.send("Hii");
