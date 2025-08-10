@@ -7,7 +7,11 @@ export const AuthContext = createContext(null);
 export default function AuthProvider({ children }) {
     const [signInFormData, setSignInFormData] = useState(initialSignInFormData);
     const [signUpFormData, setSignUpFormData] = useState(initialSignUpFormData);
-    
+    const [auth, setAuth] = useState({
+        authenticate: false,
+        user: null
+    })
+
     async function handleRegisterUser(event) {
         event.preventDefault();
         const data = await registerService(signUpFormData);
@@ -16,17 +20,74 @@ export default function AuthProvider({ children }) {
     async function handleLoginUser(event) {
         event.preventDefault();
         const data = await loginService(signInFormData);
+
+        if (data.success) {
+            sessionStorage.setItem('accessToken', JSON.stringify(data.data.accessToken));
+            setAuth({
+                authenticate: true,
+                role: data.data.user
+            });
+        } else {
+            setAuth({
+                authenticate: false,
+                role: null
+            });
+        }
     }
 
+
+    //check auth user
+
+    async function checkAuthUser() {
+        try {
+            const data = await checkAuthService();
+            if (data.success) {
+                setAuth({
+                    authenticate: true,
+                    user: data.data.user,
+                });
+                setLoading(false);
+            } else {
+                setAuth({
+                    authenticate: false,
+                    user: null,
+                });
+                setLoading(false);
+            }
+        } catch (error) {
+            console.log(error);
+            if (!error?.response?.data?.success) {
+                setAuth({
+                    authenticate: false,
+                    user: null,
+                });
+                setLoading(false);
+            }
+        }
+    }
+
+    function resetCredentials() {
+        setAuth({
+            authenticate: false,
+            user: null,
+        });
+    }
+
+    useEffect(() => {
+        checkAuthUser();
+    }, []);
+
+    console.log(auth, "gf");
+
     return (
-    <AuthContext.Provider value={{
-        signInFormData,
-        setSignInFormData,
-        signUpFormData,
-        setSignUpFormData,
-        handleRegisterUser,
-        handleLoginUser
-    }} >
-        { children }
-    </AuthContext.Provider>);
+        <AuthContext.Provider value={{
+            signInFormData,
+            setSignInFormData,
+            signUpFormData,
+            setSignUpFormData,
+            handleRegisterUser,
+            handleLoginUser
+        }} >
+            {children}
+        </AuthContext.Provider>);
 }
