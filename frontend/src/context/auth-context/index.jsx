@@ -12,6 +12,8 @@ export default function AuthProvider({ children }) {
         user: null
     })
 
+    const[loading, setLoading] = useState(ture);
+
     async function handleRegisterUser(event) {
         event.preventDefault();
         const data = await registerService(signUpFormData);
