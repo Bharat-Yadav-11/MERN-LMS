@@ -1,6 +1,7 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import { initialSignInFormData, initialSignUpFormData } from "@/config";
-import { registerService, loginService } from "@/services";
-import { createContext, useState } from "react";
+import { registerService, loginService, checkAuthService } from "@/services";
+import { createContext, useState, useEffect } from "react";
 
 export const AuthContext = createContext(null);
 
@@ -12,11 +13,13 @@ export default function AuthProvider({ children }) {
         user: null
     })
 
-    const[loading, setLoading] = useState(ture);
+    const[loading, setLoading] = useState(true);
 
     async function handleRegisterUser(event) {
         event.preventDefault();
         const data = await registerService(signUpFormData);
+        console.log(data);
+        
     }
 
     async function handleLoginUser(event) {
@@ -76,8 +79,6 @@ export default function AuthProvider({ children }) {
     useEffect(() => {
         checkAuthUser();
     }, []);
-
-    console.log(auth, "gf");
 
     return (
         <AuthContext.Provider value={{
