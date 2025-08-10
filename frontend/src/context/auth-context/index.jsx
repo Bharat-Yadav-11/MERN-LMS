@@ -35,9 +35,7 @@ export default function AuthProvider({ children }) {
         }
     }
 
-
     //check auth user
-
     async function checkAuthUser() {
         try {
             const data = await checkAuthService();
@@ -86,8 +84,10 @@ export default function AuthProvider({ children }) {
             signUpFormData,
             setSignUpFormData,
             handleRegisterUser,
-            handleLoginUser
+            handleLoginUser,
+            auth,
+            resetCredentials
         }} >
-            {children}
+            {loading ? <Skeleton /> : children}
         </AuthContext.Provider>);
 }
