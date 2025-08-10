@@ -17,7 +17,7 @@ export async function loginService(formData) {
 
 export async function checkAuthService() {
   const { data } = await axiosInstance.get("/auth/check-auth");
-  
+
   return data;
 }
 
