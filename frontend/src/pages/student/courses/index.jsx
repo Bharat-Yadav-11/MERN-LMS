@@ -132,11 +132,11 @@ function StudentViewCoursesPage() {
         <aside className="w-full md:w-64 space-y-4">
           <div>
             {Object.keys(filterOptions).map((ketItem) => (
-              <div className="p-4 border-b">
+              <div className="p-4 border-b" key={ketItem}>
                 <h3 className="font-bold mb-3">{ketItem.toUpperCase()}</h3>
                 <div className="grid gap-2 mt-2">
                   {filterOptions[ketItem].map((option) => (
-                    <Label className="flex font-medium items-center gap-3">
+                    <Label className="flex font-medium items-center gap-3" key={option.id}>
                       <Checkbox
                         checked={
                           filters &&
@@ -201,7 +201,7 @@ function StudentViewCoursesPage() {
                     <div className="w-48 h-32 flex-shrink-0">
                       <img
                         src={courseItem?.image}
-                        className="w-ful h-full object-cover"
+                        className="w-full h-full object-cover"
                       />
                     </div>
                     <div className="flex-1">

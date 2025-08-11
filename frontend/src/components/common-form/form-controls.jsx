@@ -24,8 +24,8 @@ function FormControls({ formControls = [], formData, setFormData }) {
             type={getControlItem.type}
             value={currentControlItemValue}
             onChange={(event) => setFormData({
-                ...formData,
-                [getControlItem.name] : event.target.value
+              ...formData,
+              [getControlItem.name]: event.target.value
             })}
           />
         );
@@ -33,10 +33,15 @@ function FormControls({ formControls = [], formData, setFormData }) {
       case "select":
         element = (
           <Select
-            onValueChange={(currentControlItemValue) => setFormData({
-              ...formData,
-              [getControlItem.name] : value
-            })}
+            // ✅ Corrected: use the parameter name, not an undefined variable
+            onValueChange={(selectedValue) =>
+              setFormData({
+                ...formData,
+                [getControlItem.name]: selectedValue // <-- was "value", now fixed
+              })
+            }
+            // If you want the select to show current value from formData:
+            value={currentControlItemValue} // <-- optional binding
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder={getControlItem.label} />
@@ -44,15 +49,19 @@ function FormControls({ formControls = [], formData, setFormData }) {
             <SelectContent>
               {getControlItem.options && getControlItem.options.length > 0
                 ? getControlItem.options.map((optionItem) => (
-                    <SelectItem key={optionItem.id} value={optionItem.id}>
-                      {optionItem.label}
-                    </SelectItem>
-                  ))
+                  <SelectItem
+                    key={optionItem.id}
+                    value={optionItem.id} // 🔹 Value sent to onValueChange
+                  >
+                    {optionItem.label}
+                  </SelectItem>
+                ))
                 : null}
             </SelectContent>
           </Select>
         );
         break;
+
       case "textarea":
         element = (
           <Textarea
