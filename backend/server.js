@@ -41,14 +41,7 @@ app.use((err, req, res, next) => {
     success: false,
     message: "Something went wrong",
   });
-  next();
 });
-
-app.get('/', (req, res) => {
-    res.send("Hii");
-});
-
-
 
 
 app.listen(PORT, () => {
